@@ -1,0 +1,7 @@
+#foreach($invite in $inviteList)
+    <div class="well">
+        <p><a href="user?method=guest_user_index&userid=$!invite.user.userid">$!invite.user.username</a> 邀请我翻译</p>
+
+        <h4><a href="document?method=show&docid=$!invite.document.docid">$!invite.document.title</a></h4>
+    </div>
+#end

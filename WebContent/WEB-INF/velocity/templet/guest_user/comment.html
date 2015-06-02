@@ -1,0 +1,6 @@
+#foreach($comment in $guestCommentList)
+	<div class="well">
+        <b>$!guest.username</b>评论了
+		<a href="document?method=show&docid=$!comment.document.docid">$!comment.document.title</a>
+    </div>
+#end

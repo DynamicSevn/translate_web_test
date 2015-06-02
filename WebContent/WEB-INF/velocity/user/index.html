@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+
+<title>欢迎</title>
+#parse("templet/js.html")
+#parse("templet/css.html")
+
+</head>
+<body>
+#parse("templet/navbar.html")
+
+<script type="text/javascript" src="http://v3.jiathis.com/code/jia.js" charset="utf-8"></script>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-1">
+        </div>
+        <div class="col-lg-10">
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="page-header">
+                        <h1>
+                           	 最新求译
+                        </h1>
+                    </div>
+					
+					#set($documentList = $page.tList)
+                    #foreach($document in $documentList)
+                        <div class="thumbnail">
+                            <div class="caption">
+								
+                                <h3>
+                                    $document.title
+                                </h3>
+                                
+									#set($str=$document.content)
+                                    #if($str.length()>400)
+										#set($str=$str.substring(0,400))
+										#set($getStr = $str.replaceAll("<[.[^<]]*>",""))
+										#set($getStr = $getStr.replaceAll("<[.[^<]]*",""))
+										
+										<p>$getStr</p>
+									#else
+										<p>$!document.content</p>
+									#end
+                                
+                                <p>
+                                    <a class="btn btn-primary" href="/document?method=show&docid=$document.docid">浏览</a> 
+                                </p>
+                            </div>
+                        </div>
+					#end
+					
+					#parse("templet/pager.html")
+                </div>
+
+                <div class="col-lg-4" style="padding-top:100px">
+					
+					
+					<div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <span class="glyphicon glyphicon-star-empty"></span>热门文档
+                            </h4>
+						</div>
+                       	<div class="panel-body">                        				
+        					#foreach($hotDoc in $hotDocList)
+                                <p><a href="document?method=show&docid=$!hotDoc.docid">$hotDoc.title<br /></a></p>
+        					#end
+						</div>	
+                    </div>
+					
+					<div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <span class="glyphicon glyphicon-star-empty"></span>热门翻译
+                            </h4>
+						</div>
+                       	<div class="panel-body">                        				
+        					#foreach($hotCom in $hotComList)
+								#set($str = $hotCom.content)
+								#if($str.length()>20)
+									<p><a href="document?method=show&docid=$!hotCom.docid">$str.substring(0,20)...<br /></a></p>
+								#else
+									<p><a href="document?method=show&docid=$!hotCom.docid">$str<br /></a></p>
+								#end
+        					#end
+						</div>	
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+        <div class="col-lg-1">
+        </div>
+    </div>
+</div>
+</body>
+</html>

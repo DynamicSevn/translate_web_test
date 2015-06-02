@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+<meta charset="UTF-8">
+<title>添加文档</title> 
+#parse("templet/js.html") 
+#parse("templet/css.html")
+
+<link rel="stylesheet" type="text/css" href="css/modalstyle.css" />
+<link type="text/css" rel="stylesheet" href="css/popModal.css">
+
+<link rel="stylesheet" href="css/jquery.range.css">
+<link rel="stylesheet" href="css/font-awesome.min.css">
+<link href="css/wysiwyg-editor.css" rel="stylesheet">
+<script src="js/wysiwyg.js"></script>
+<script src="js/wysiwyg-editor.js"></script>
+
+<script src="js/wysiwyg-user.js"></script>
+<script src="js/jquery.range.js"></script>
+<script src="js/popModal.js"></script>
+<style type="text/css">
+
+
+
+body {
+	font-family: Arial, Verdana;
+}
+
+p {
+	margin: 0;
+	padding: 0;
+}
+
+.button {
+	-moz-user-select: none;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+/* CSS for the font-name + font-size plugin */
+.wysiwyg-toolbar-list {
+	max-height: 16em;
+	overflow: auto;
+	overflow-x: hidden;
+	overflow-y: scroll;
+}
+
+.wysiwyg-toolbar-list a, .wysiwyg-toolbar-list a:link,
+	.wysiwyg-toolbar-list a:visited {
+	display: block;
+	color: black;
+	padding: 5px 10px;
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.wysiwyg-toolbar-list a:hover {
+	color: HighlightText;
+	background-color: Highlight;
+}
+/* CSS for the smiley plugin */
+.wysiwyg-toolbar-smilies {
+	padding: 10px;
+	text-align: center;
+	white-space: normal;
+}
+
+.wysiwyg-toolbar-smilies img {
+	display: -moz-inline-stack;
+	/* inline-block: http://blog.mozilla.org/webdev/2009/02/20/cross-browser-inline-block/ */
+	display: inline-block;
+	*display: inline;
+}
+</style>
+
+
+</head>
+<body>
+	#parse("templet/navbar.html")
+
+	<div class="row">
+		<div class="col-lg-1"></div>
+
+
+		<div class="col-lg-10">
+
+			<div class="page-header">
+				<h1>添加文档</h1>
+			</div>
+            <input type="text" class="nodisplay" id="user_point" value=$!user.point>
+			<form action="document?method=add" method="post" role="form">
+			    
+				<div class="form-group col-lg-offset-11">
+					   <button type="submit" class="btn btn-primary">提交编辑</button>
+				</div>
+				
+				<input type="text" name="guestIdStr" id="frindIdStr" class="nodisplay">
+				
+				<div class="form-group">
+				    <label>悬赏</label>
+				    <div style="margin:15px 0px 30px 5px">
+				        <input type="hidden" name="point" class="single-slider" value="0"/>
+				    </div>
+				</div>
+				<div class="form-group">
+					<label>标题</label> <input type="text" name="title"
+						class="form-control" placeholder="请在此输入标题...">
+				</div>
+				
+                <div class="form-group">
+                    <label>邀请翻译</label> <input type="text" name="invite" id="invite_friend"
+                        class="form-control" placeholder="点击获取我关注的好友..." readonly>
+                </div>
+                				
+				<div class="form-group">
+					<label>正文</label>
+					<textarea id="editor" rows="10" name="content" placeholder="请在此输入文字...">
+                    </textarea>
+				</div>
+			</form>
+		</div>
+
+		<div class="col-lg-1"></div>
+	</div>
+	#parse("templet/get_follow_model.html")
+    <script>
+        $(function(){
+            
+            $("#invite_friend").bind("click",function(){
+                    $('#invite_friend').popModal({
+                        html : $('#invite_model'),
+                        placement : 'bottomLeft',
+                        showCloseBut : true,
+                        onDocumentClickClose : true,
+                        onOkBut : function(){
+                            var res="";
+                            var resText="";
+                            var checObj = $("input[type='checkbox']:checked");
+                            checObj.each(function(){
+                                var isChec = this.value;
+                                var isChecText = $(this).parent().text();
+                                resText+=isChecText+";";
+                                res+=isChec+";";
+                            });
+                            $("#invite_friend").val(resText);
+                            $("#frindIdStr").val(res);
+                        },
+                        onCancelBut : function(){},
+                        onLoad : function(){},
+                        onClose : function(){}
+                    });
+            });
+            
+            
+            $('.single-slider').jRange({
+                from: 0,
+                to: $("#user_point").val(),
+                step: 1,
+                format: '%s',
+                width: 300,
+                showLabels: true,
+                showScale: true
+            });
+            
+            
+            
+        });
+        
+        
+    </script>
+</body>
+</html>

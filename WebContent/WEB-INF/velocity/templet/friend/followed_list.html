@@ -1,0 +1,20 @@
+#foreach($followedFriend in $followedFriendList)
+
+    <div class="thumbnail col-lg-4">
+        <div class="nodisplay">$!followedFriend.friendid</div>
+            <div class="caption">
+                <h3>
+                    <a href="user?method=guest_user_index&userid=$!followedFriend.guestUser.userid">$followedFriend.guestUser.username</a>
+                </h3>
+    
+                <p>
+                                                    姓名：$followedFriend.guestUser.firstname<br>
+                                                    电子邮箱：$followedFriend.guestUser.email<br>
+                                                    积分：$followedFriend.guestUser.point<br>
+                </p>
+   
+    
+            </div>
+        </div>
+    </div>
+#end

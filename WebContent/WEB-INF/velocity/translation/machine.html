@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>机器翻译</title>
+#parse("templet/js.html")
+#parse("templet/css.html")
+
+</head>
+<body>
+
+#parse("templet/navbar.html")
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-1">
+        </div>
+        <div class="col-lg-10">
+            <h3 class="page-header">
+                机器翻译
+            </h3>
+            <div class="row">
+                <div class="col-lg-12">
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-lg-2 control-label">源语言</label>
+                        <div class="col-lg-3">
+                        <select class="form-control" id="from">
+                                <option value="auto">自动检测</option>
+                                <option value="zh">中文</option>
+                                <option value="en">英语</option>
+                                <option value="jp">日语</option>
+                                <option value="ru">俄语</option>
+                                <option value="ara">阿拉伯语</option>
+                                <option value="de">德语</option>
+                                <option value="spa">西班牙语</option>
+                                <option value="th">泰语</option>
+                                <option value="yue">粤语</option>
+                                <option value="nl">荷兰语</option>
+                                <option value="kor">韩语</option>
+                                <option value="fra">法语</option>
+                                <option value="pt">葡萄牙语</option>
+                                <option value="it">意大利语</option>
+                                <option value="el">希腊语</option>
+                                <option value="wyw">文言文</option>
+                        </select>
+                        </div>
+
+                        <label class="col-lg-2 control-label">目标语言</label>
+                        <div class="col-lg-3">
+                            <select class="form-control" id="to">
+                                <option value="auto">自动检测</option>
+                                <option value="zh">中文</option>
+                                <option value="en">英语</option>
+                                <option value="jp">日语</option>
+                                <option value="ru">俄语</option>
+                                <option value="ara">阿拉伯语</option>
+                                <option value="de">德语</option>
+                                <option value="spa">西班牙语</option>
+                                <option value="th">泰语</option>
+                                <option value="yue">粤语</option>
+                                <option value="nl">荷兰语</option>
+                                <option value="kor">韩语</option>
+                                <option value="fra">法语</option>
+                                <option value="pt">葡萄牙语</option>
+                                <option value="it">意大利语</option>
+                                <option value="el">希腊语</option>
+                                <option value="wyw">文言文</option>
+                            </select>
+                        </div>
+
+                        <div class="col-lg-2">
+                            <button class="btn btn-primary" id="trans-btn">猿译翻译</button>
+                        </div>
+                    </div>
+
+
+
+                </div>
+                </div>
+            </div>
+
+            <div class="alert alert-info">如果自动检测翻译的结果您不满意，您可以自定义源语言和目标语言。</div>
+
+            <div class="row">
+                    <div class="col-lg-6">
+                        <label>要翻译的文字</label>
+                        <textarea class="form-control" rows="15" id="fromtext"  placeholder="输入即可翻译..."></textarea>
+                        <label id="fromtips"></label>
+                    </div>
+                    <div class="col-lg-6">
+                        <label>已翻译的文字</label>
+                        <textarea class="form-control" rows="15" id="totext" readonly></textarea>
+                        <label id="totips"></label>
+                    </div>
+
+            </div>
+        </div>
+
+
+        <div class="col-lg-1">
+        </div>
+    </div>
+</div>
+#set($jq="$.")
+<script type="text/javascript">
+	
+	function trans(){
+    	${jq}ajax({
+    		
+            url:"http://openapi.baidu.com/public/2.0/bmt/translate",
+            dataType:"JSONP",
+            data:{from:$("#from").val().toString(),
+                    to:$("#to").val().toString(),
+                    client_id:"s0Vnnj3Oi5TG3RBLPCOszvUT",
+                    q:$("#fromtext").val()
+
+            },
+            success:function(data){
+            	var dst="";
+            	if(data.hasOwnProperty('trans_result')){
+	            	for(var i=0;i<data.trans_result.length;i++){
+	                    dst=dst+data.trans_result[i].dst+"\n";
+	                    $("#totext").text(dst+"\n");
+	            	}
+            	}else 
+            		$("#totext").text("");
+            	
+                var from = data.from;
+                var to = data.to;
+               	$("#fromtips").text("自动检测的语言是："+$("#from").children("option[value="+from+"]").text());
+               	$("#totips").text("自动检测的语言是："+$("#to").children("option[value="+to+"]").text());
+                // if($("#from").val()=="auto"){
+                    // $("#from").text("自动检测:"+from);
+                    // $("#to").text("自动检测:"+to);
+                // }
+            },
+            error:function(data){
+
+            }
+        });
+	}
+	//这里入参居然只要写函数名而不要写后面的括号,那么怎样与变量区别呢？这样多态性不就降低了吗？
+    $(document).ready($("#fromtext").bind('click change input',trans));
+    
+    $("#trans-btn").click(trans);
+</script>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<div style="display:none">
+    
+<div id="invite_model" >
+	<form id="frind_form">
+    #foreach($follow in $followList)
+    <div class="checkbox">
+        <label><input type="checkbox" value=$!follow.guestid>$!follow.guestUser.username</label>
+    </div>
+	#end
+	
+    <div class="popModal_footer">
+        <button type="button" class="btn btn-primary" data-popModalBut="ok">
+                                    确定
+        </button>
+        <button type="button" class="btn" data-popModalBut="cancel">
+                                    取消
+        </button>
+    </div>
+	</form>
+</div>
+</div>

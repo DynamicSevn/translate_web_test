@@ -1,0 +1,83 @@
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+	<div class="row">
+		<div class="col-lg-1"></div>
+		<div class="col-lg-8">
+			<div class="navbar-header">
+				<a href=""><img alt="logo" src="images/logo-word.png"></a>
+			</div>
+			<div>
+				<!--向左对齐-->
+
+				<form class="navbar-form navbar-left" role="search" method="post" action="document?method=search">
+					<div class="form-group">						
+						<input type="text" name="str" class="form-control" placeholder="Search">
+					</div>
+					<button type="submit" class="btn btn-default">搜索</button>
+				</form>
+
+				<p class="navbar-text navbar-left">
+					<a href="user?method=index" class="navbar-link">首页</a>
+				</p>
+				<p class="navbar-text navbar-left">
+					<a href="trans?method=machine" class="navbar-link">机器翻译</a>
+				</p>
+
+				<p class="navbar-text navbar-left">
+					<a href="document?method=index" class="navbar-link">猿译社区</a>
+				</p>
+			</div>
+		</div>
+		<!--向右对齐-->
+		<div class="col-lg-2">
+			<ul class="nav navbar-nav navbar-right">
+				<li class="dropdown">
+				
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown"> 
+					<span id="news_count" class="badge pull-right"></span>$!user.username
+				</a>
+					<ul class="dropdown-menu multi-level" role="menu"
+						aria-labelledby="dropdownMenu">
+						<li><a href="document?method=list">我的猿译</a></li>
+						<li class="divider"></li>
+						<li class="dropdown-submenu"><a href="javascript:;">求翻译</a>
+							<ul class="dropdown-menu">
+								<li><a href="trans?method=machine">机器翻译</a></li>
+								<li><a href="document?method=add">猿友翻译</a></li>
+							</ul></li>
+							
+						<li class="divider"></li>
+						<li><a href="document?method=list&target=show_msg">消息
+								<span class="badge pull-right" id="son_news_count"></span>						
+							</a>
+						</li>
+						
+						<li class="divider"></li>
+						<li><a href="user?method=cancel">注销账号</a></li>
+					</ul>
+				</li>
+			</ul>
+		</div>
+		<div class="col-lg-1"></div>
+        
+	</div>
+	#set($jq="$.")
+	<script>
+	
+		$(document).ready(getNewMsg());
+		
+		
+		
+	    function getNewMsg(){
+	        ${jq}ajax({
+				url:"/message?method=get_msg_count",
+				dataType:"text",
+				method:"GET",
+				success:function(data){
+					$("#news_count").text(data);
+					$("#son_news_count").text(data);
+				}
+			});
+			setTimeout('getNewMsg()',4000);
+	    }
+	</script>
+</nav>

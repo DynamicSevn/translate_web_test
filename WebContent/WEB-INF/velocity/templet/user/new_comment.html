@@ -1,0 +1,53 @@
+    <div class="page-header">
+        <h3>我的消息</h3>
+    </div>
+    <ul id="myTab" class="nav nav-tabs">
+       <li class="active">
+          <a href="#home" data-toggle="tab">
+			我收到的评论
+          </a>
+       </li>
+       <li><a href="#love" data-toggle="tab">我收到的赞</a></li>
+	   <li><a href="#want" data-toggle="tab">我收到的同求</a></li>
+	   <li><a href="#invite" data-toggle="tab">邀请信息</a></li>
+	   <li><a href="#accept" data-toggle="tab">接受信息</a></li>
+
+    </ul>	
+	
+	
+	<div id="myTabContent" class="tab-content">
+		<div class="tab-pane fade in active" id="home">
+        #foreach($comment in $newComment)
+            <div class="well">
+                <a>$!comment.user.username</a> 翻译了我的    <a href="document?method=show&docid=$!comment.document.docid">$!comment.document.title</a>
+        		<blockquote>
+					<small>$!comment.content</small>
+                </blockquote>
+			</div>
+		#end
+		</div>
+		
+		<div class="tab-pane fade" id="love">
+			
+		</div>
+		
+		<div class="tab-pane fade" id="want">
+			
+		</div>
+		
+		<div class="tab-pane fade" id="invite">
+			
+		</div>
+		
+		<div class="tab-pane fade" id="accept">
+			
+		</div>
+	</div>
+    <script>
+		$("#love").load("message?method=show_love");
+		$("#want").load("message?method=show_want");
+		$("#invite").load("message?method=show_invite");
+		$("#accept").load("comment?method=show_accept");
+	</script>
+    </div>
+	

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>$!guestUser.username的主页</title>
+        #parse("templet/js.html")
+        #parse("templet/css.html")
+    </head>
+    <body>
+        #parse("templet/navbar.html")
+
+        <div class="col-lg-1"></div>
+
+        <div class="col-lg-10">
+
+            <div class="page-header">
+                
+                <h3>$!guestUser.username的主页</h3>
+                #if($!isFriend)
+                    <button type="button" id="addFriendBtn" class="btn btn-primary disabled">
+                                                                        已关注该用户
+                    </button>
+                #else
+                    <button type="button" id="addFriendBtn" class="btn btn-primary" data-loading-text="关注中..." data-complete-text="已关注">
+                        <span class="glyphicon glyphicon-plus"></span>关注该用户
+                    </button>
+                #end
+            </div>
+            <ul id="myTab" class="nav nav-tabs">
+                <li class="active">
+                    <a href="#document" data-toggle="tab"> 他的文档 </a>
+                </li>
+                <li>
+                    <a href="#comment" data-toggle="tab">他的翻译</a>
+                </li>
+                <li>
+                    <a href="#info" data-toggle="tab">他的信息</a>
+                </li>
+            </ul>
+
+            <div id="myTabContent" class="tab-content">
+                <div class="tab-pane fade in active" id="document">
+
+                </div>
+
+                <div class="tab-pane fade" id="comment">
+
+                </div>
+
+                <div class="tab-pane fade" id="info">
+
+                </div>
+
+            </div>
+
+        </div>
+        
+        <div class="col-lg-1">
+        </div>
+    </body>
+        #set($jq="$.")
+        <script>
+            $("#document").load("document?method=guest_user_list&userid=$!guestUser.userid");
+            $("#comment").load("comment?method=guest_user_list&userid=$!guestUser.userid");
+            $("#info").load("user?method=guest_user_info&userid=$!guestUser.userid");
+            
+            $("#addFriendBtn").click(function(){
+                $(this).button('loading').delay(1000).queue(function() {
+                ${jq}ajax({
+                        url:"friend?method=add",
+                        method:"get",
+                        dataType:"text",
+                        data:{
+                            guestid:$!guestUser.userid
+                        },
+                        success:function(data){
+                            $("#addFriendBtn").text("已关注");
+                        }
+                    });                                      
+                    
+                });        
+            });
+        </script>
+</html>

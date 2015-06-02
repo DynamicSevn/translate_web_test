@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>详情</title>
+
+#parse("templet/js.html") 
+#parse("templet/css.html")
+</head>
+<body>
+	
+	#parse("templet/navbar.html")
+
+	<div class="col-lg-1"></div>
+
+    <div class="col-lg-10">
+        <div class="page-header">
+            <h1>$document.title</h1>
+                
+			<div>
+
+                <a href="user?method=guest_user_index&userid=$!author.userid" type="button" class="btn btn-primary btn-xs">
+                    <span class="glyphicon glyphicon-user"></span> 作者:$author.username
+                </a>
+
+                <a type="button" class="btn btn-primary btn-xs" href="#comment">
+                    <span class="glyphicon glyphicon-comment"></span> 翻译:$page.totleCount条
+                </a>
+
+                <button type="button" id="wantBtn" class="btn btn-primary btn-xs">
+                    <span class="glyphicon glyphicon-bullhorn"></span> 同求:<span id="wantCount">$!wantCount</span>次
+                </button>
+				
+				<button type="button" class="btn btn-primary btn-xs disabled">
+                    <span class="glyphicon glyphicon-pencil"></span> 最后编辑:$document.edittime
+                </button>
+                
+   				<button type="button" class="btn btn-primary btn-xs disabled">
+                    <span class="glyphicon glyphicon-gbp"></span> 悬赏积分:$document.point分
+                </button>
+            </div>
+			
+        </div>
+		
+        <div>
+			$document.content
+        </div>
+	<!--接受的翻译-->	
+		#if($!accComment)
+		<div class="page-header">
+            <h4><span class="glyphicon glyphicon-ok"></span>文档发布者已经接受的翻译</h4>
+        </div>
+		
+		<blockquote>
+		    
+			<input type="text" class="nodisplay" id="commid" value=$accComment.comid>
+			<div>
+				<a href="user?method=guest_user_index&userid=$!accComment.user.userid" type="button" class="btn btn-default btn-xs">
+                    <span class="glyphicon glyphicon-user"></span> 翻译者:$accComment.user.username
+                </a>
+				<button type="button" class="btn btn-default btn-xs disabled">
+                    <span class="glyphicon glyphicon-pencil"></span> 翻译时间:$accComment.edittime
+                </button>
+				
+				<button type="button" class="btn btn-default btn-xs disabled">
+                    <span class="glyphicon glyphicon glyphicon-heart-empty"></span> like:<span>$!accComment.likeTime</span>次
+                </button>
+            </div>
+			
+			<small>
+				$accComment.content
+				
+				#if($accComment.canDel)
+					<p><a href="#" class="pull-right" value="" onclick="model('$!accComment.comid')" data-toggle="modal">删除</a></p>
+				#end
+            </small>
+            
+		</blockquote>
+		
+		#end
+		
+<!--其他翻译-->		
+		
+		
+		<div class="page-header">
+            <h4>$msg</h4>
+        </div>
+		
+        <div id="comment">
+		#if($page.tList)
+    		#set($commentList = $page.tList)
+    		#foreach($comment in $commentList)
+
+    			<blockquote>
+    			    
+					<input type="text" class="nodisplay" id="commid" value=$comment.comid>
+    				<div>
+        				<a href="user?method=guest_user_index&userid=$!comment.user.userid" type="button" class="btn btn-default btn-xs">
+                            <span class="glyphicon glyphicon-user"></span> 翻译者:$comment.user.username
+                        </a>
+        				<button type="button" class="btn btn-default btn-xs disabled">
+                            <span class="glyphicon glyphicon-pencil"></span> 翻译时间:$comment.edittime
+                        </button>
+						
+						<button type="button" class="btn btn-default btn-xs" id="likeBtn" onclick="likeFunc($comment.comid)">
+                            <span class="glyphicon glyphicon glyphicon-heart-empty"></span> like:<span id="likeCount$!comment.comid">$!comment.likeTime</span>次
+                        </button>
+                    </div>
+					
+
+											
+					<small>
+						$comment.content
+						
+						<div class="pull-right">
+						#if($comment.canDel)
+							<span><a href="#" value="" onclick="model('$!comment.comid')" data-toggle="modal">删除</a></span>
+						#end
+						
+						#if($!canAcc)
+							<span><button type="button" onclick="accFunc($!comment.comid,this)" id="accBtn" class="btn btn-primary btn-sm" data-loading-text="接受中...">接受</button></span>
+						#end						
+						
+						</div>
+                    </small>
+                    
+				</blockquote>
+				<hr/>
+			#end
+			#parse("templet/comment_pager.html")
+		#end
+		</div>
+		
+		
+		<form action="comment?method=add" method="post">
+			<input type="text" class="nodisplay" name="docid" id="docid" value=$document.docid >
+			<div class="form-group">
+                <label>添加翻译</label>
+				<textarea id="content" name="content" class="form-control" rows="5" placeholder="在此处输入翻译.."></textarea>
+            </div>
+    		<button id="submit" type="submit" class="btn btn-primary pull-right">
+    			提交
+            </button>
+		</form>
+		
+		
+    </div>
+	
+	
+	
+    <div class="col-lg-1"></div>
+	#parse("templet/confirm_model.html")
+	
+	#set($jq="$.")
+	
+	
+    <script>
+	
+	
+		function accFunc(comid,obj){
+            $(obj).button('loading').delay(1000).queue(function() {
+            ${jq}ajax({
+                    url:"comment?method=accept",
+                    method:"get",
+                    dataType:"text",
+                    data:{
+                        comid:comid
+                    },
+                    success:function(data){
+                        $("#accBtn").text("已接受");
+                    }
+                });                                      
+                
+            }); 
+		}
+	
+	
+	
+	
+	
+    	function likeFunc(commid){
+            ${jq}ajax({
+                url:"/love?method=add_ajax",
+                dataType:"text",
+                data:{
+                    commid:commid
+                },
+                success:function(data){
+                    $("#likeCount"+commid).text(data);
+                }
+            });
+        }
+        
+        
+        function upFunc(){
+            ${jq}ajax({
+                url:"/want?method=add_ajax",
+                dataType:"text",
+                data:{
+                    docid:$("#docid").val()
+                },
+                success:function(data){
+                    $("#wantCount").text(data);
+                }
+            });
+        }
+        $("#wantBtn").click(upFunc);
+        
+        function model(comid){
+            
+            $("#myModal").modal('show');
+            $("#confirm").click(function(){
+                window.location.href="comment?method=delete&comid="+comid+"$!comment.comid&docid=$!document.docid";
+            });
+            
+        }
+	</script>
+</body>
+</html>

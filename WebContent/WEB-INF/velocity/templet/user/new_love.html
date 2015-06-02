@@ -1,0 +1,16 @@
+#foreach($love in $newLoveList)
+    <div class="well">
+        <div class="pull-right">
+    		<button type="button" class="btn btn-default btn-xs disabled">
+    			<span class="glyphicon glyphicon-pencil"></span> $love.creattime
+            </button>
+		</div>
+        <p><a>$!love.user.username</a> 赞了我的翻译</p>
+        <blockquote>
+
+            <small>
+				<a href="document?method=show&docid=$!love.comment.docid">$!love.comment.content</a>
+			</small>
+        </blockquote>
+    </div>
+#end

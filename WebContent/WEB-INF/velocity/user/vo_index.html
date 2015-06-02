@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+#parse("templet/js.html")
+#parse("templet/css.html")
+<title>我的猿译</title>
+
+<style type="text/css">
+    /* Custom Styles */
+    #myScrollspy ul.nav-tabs{
+        width: 280px;
+        margin-top: 20px;
+        border-radius: 4px;
+        border: 1px solid #ddd;
+        box-shadow: 0 1px 4px rgba(0, 0, 0, 0.067);
+    }
+    #myScrollspy ul.nav-tabs li{
+        margin: 0;
+        border-top: 1px solid #ddd;
+    }
+    #myScrollspy ul.nav-tabs li:first-child{
+        border-top: none;
+    }
+    #myScrollspy ul.nav-tabs li a{
+        margin: 0;
+        padding: 8px 16px;
+        border-radius: 0;
+    }
+    #myScrollspy ul.nav-tabs li.active a, ul.nav-tabs li.active a:hover{
+        color: #fff;
+        background: #0088cc;
+        border: 1px solid #0088cc;
+    }
+    #myScrollspy ul.nav-tabs li:first-child a{
+        border-radius: 4px 4px 0 0;
+    }
+    #myScrollspy ul.nav-tabs li:last-child a{
+        border-radius: 0 0 4px 4px;
+    }
+    #myScrollspy ul.nav-tabs.affix{
+        top: 30px; /* Set the top position of pinned element */
+    }
+</style>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $("#myNav").affix({
+            offset: {
+                top: 125
+            }
+        });
+    });
+</script>
+
+</head>
+
+<body data-spy="scroll" data-target="#myScrollspy">
+#parse("templet/navbar.html")
+
+    <input type="text" class="nodisplay" id="target" value=$!target>
+    <div class="row">
+        <div class="col-lg-1"></div>
+        
+        <div class="col-lg-3" id="myScrollspy">
+            <ul class="nav nav-tabs nav-stacked" id="myNav">
+                <li id="my_doc_li" class="active"><a href="document?method=list">我的求译</a></li>
+                <li id="my_comm_li"><a id="my_comm">我的翻译</a></li>
+                <li id="user_info_li"><a id="user_info">用户信息</a></li>
+                <li id="my_info_li"><a id="my_info">我的消息</a></li>
+                <li id="my_friend_li"><a id="my_friend">我的朋友</a></li>
+            </ul>
+        </div>
+
+    
+        <div class="col-lg-7" id="content-section">
+                    <div class="page-header">
+                        <h2>我的求译</h2>
+                    </div>
+                    
+                    #set($documentList = $page.tList)
+                    #foreach($document in $documentList)
+                        <div class="thumbnail">
+                            <div class="nodisplay">$!document.docid</div>
+                            <div class="caption">
+                                
+                                <h3>
+                                    $document.title
+                                </h3>
+                                
+                                    #set($str=$document.content)
+                                    #if($str.length()>400)
+                                        #set($str=$str.substring(0,400))
+                                        #set($getStr = $str.replaceAll("<[.[^<]]*>",""))
+                                        #set($getStr = $getStr.replaceAll("<[.[^<]]*",""))
+                                        
+                                        <p>$getStr</p>
+                                    #else
+                                        <p>$!document.content</p>
+                                    #end
+                                
+                                <p>
+                                    <a class="btn btn-primary" href="/document?method=show&docid=$document.docid">浏览</a> 
+                                    
+                                    <a class="btn btn-primary" onclick="model(this)" data-toggle="modal">删除</a>
+                                    <a class="btn btn-primary" href="/document?method=modify&docid=$document.docid">修改</a>
+                                    
+                                </p>
+                            </div>
+                        </div>
+                    #end
+                    
+                    #parse("templet/vo_pager.html")
+                    #parse("templet/confirm_model.html")            
+            
+        </div>
+        <div class="col-lg-1"></div>
+    </div>
+    <script>
+        var target = $("#target").val(); 
+        if(target=="show_msg"){
+            $("#my_doc_li").removeClass("active");
+            $("#my_info_li").attr("class", "active");
+            $("#content-section").load("message?method=show_comment");
+        }  
+                 
+        $("#user_info").click(function(){
+            $("#my_doc_li").removeClass("active");
+            $("#my_info_li").removeClass("active");
+            $("#my_comm_li").removeClass("active");
+            $("#my_friend_li").removeClass("active");
+            $("#user_info_li").attr("class", "active");
+            
+            $("#content-section").load("user?method=show");
+        });
+        
+        
+        $("#my_info").click(function(){
+            $("#my_doc_li").removeClass("active");
+            $("#user_info_li").removeClass("active");
+            $("#my_comm_li").removeClass("active");
+            $("#my_friend_li").removeClass("active");
+            
+            $("#my_info_li").attr("class", "active");
+            $("#content-section").load("message?method=show_comment");
+        });
+
+               
+        $("#my_comm").click(function(){
+            $("#my_doc_li").removeClass("active");
+            $("#user_info_li").removeClass("active");
+            $("#my_info_li").removeClass("active");
+            $("#my_friend_li").removeClass("active");
+            
+            $("#my_comm_li").attr("class", "active");
+            
+            $("#content-section").load("comment?method=list");
+        });
+        
+        
+        $("#my_friend").click(function(){
+            $("#my_doc_li").removeClass("active");
+            $("#user_info_li").removeClass("active");
+            $("#my_info_li").removeClass("active");
+            $("#my_comm_li").removeClass("active");
+            $("#my_friend_li").attr("class", "active");
+            
+            $("#content-section").load("friend?method=index");
+        });
+        
+         
+        
+        function modifyFunc(){
+            $("#content-section").load("user?method=modify");
+        }        
+        
+        function model(obj){
+            var divs = $(obj).parent().parent().parent().find('div');
+            var docid=divs.eq(0).text();
+            $("#myModal").modal('show');
+            $("#confirm").click(function(){
+                window.location.href="document?method=delete&docid="+docid;
+            });
+            
+        }
+    </script>
+</body>
+</html>

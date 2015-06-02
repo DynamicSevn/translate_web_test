@@ -1,0 +1,61 @@
+
+#foreach($followFriend in $followFriendList)
+
+    <div class="thumbnail col-lg-4">
+        <div class="nodisplay">$!followFriend.friendid</div>
+            <div class="caption">
+                <h3>
+                    <a href="user?method=guest_user_index&userid=$!followFriend.guestUser.userid">$followFriend.guestUser.username</a>
+                </h3>
+				<input type="text" class="nodisplay" value=$!followFriend.guestUser.userid>
+                <p>
+                                                    姓名：$!followFriend.guestUser.firstname<br>
+                                                    电子邮箱：$!followFriend.guestUser.email<br>
+                                                    积分：$!followFriend.guestUser.point<br>
+                </p>
+    
+                <p>
+					<button class="btn btn-primary" onclick="delFunc($!followFriend.friendid,this)" data-loading-text="取消中..." data-complete-text="重新关注">取消关注</button>					
+                </p>
+    
+            </div>
+        </div>
+    </div>
+#end
+#set($jq="$.")
+<script>
+	function delFunc(friendid,obj){
+			var text = $(obj).text();
+			if(text=="取消关注")
+			{
+		       	$(obj).button('loading').delay(1000).queue(function() {
+                ${jq}ajax({
+                        url:"friend?method=delete",
+                        method:"get",
+                        dataType:"text",
+                        data:{
+                            friendid:friendid
+                        },
+                        success:function(data){
+                            $(obj).button('complete');
+                        }
+                        
+                    });                                      
+                    
+                });
+			}else if(text=="重新关注"){
+				var guestId = $(obj).parent().parent().find("input").val();
+                ${jq}ajax({
+                        url:"friend?method=add",
+                        method:"get",
+                        dataType:"text",
+                        data:{
+                            guestid:guestId
+                        },
+                        success:function(data){
+                            $(obj).text("取消关注");
+                        }
+                    }); 
+			}
+	}
+</script>

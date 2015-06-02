@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE ibatorConfiguration PUBLIC "-//Apache Software Foundation//DTD Apache iBATIS Ibator Configuration 1.0//EN" "http://ibatis.apache.org/dtd/ibator-config_1_0.dtd" >
+<ibatorConfiguration >
+  <classPathEntry location="D:\jar\mysql-connector-java-5.1.6-bin.jar"/>
+  <ibatorContext id="content1">
+    <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://localhost:3306/translation" userId="root" password="sevn">
+        <property name="" value=""/>
+    </jdbcConnection>
+    
+    <!-- bean生成 -->
+    <javaModelGenerator targetPackage="com.translation.bean" targetProject="translation_web_test">
+    </javaModelGenerator>
+    
+    <!-- 映射文件生成 -->
+    <sqlMapGenerator targetPackage="config" targetProject="translation_web_test">
+    </sqlMapGenerator>
+    
+    
+ 	<!-- dao类生成 -->
+	<daoGenerator targetPackage="com.translation.dao" targetProject="translation_web_test" implementationPackage="com.translation.dao.impl" type="SPRING" />
+   
+    <!-- domainObjectName为对应类名 -->
+    <!--  <table tableName="USER" domainObjectName="">
+    </table>
+    <table tableName="document"></table>-->
+    <table tableName="invite"></table>
+    <!-- <table tableName="want"></table>
+    <table tableName="comment"></table> -->
+  </ibatorContext>
+</ibatorConfiguration>

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	#set($documentList = $page.tList)
+	#foreach($document in $documentList)
+		<li>$document.title</li>
+        <li>$document.content</li>
+	#end
+</body>
+</html>

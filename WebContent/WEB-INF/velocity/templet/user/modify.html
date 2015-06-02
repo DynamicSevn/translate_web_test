@@ -1,0 +1,60 @@
+<div class="page-header">
+    <h3>修改用户信息</h3>
+</div>
+<form class="form-horizontal" role="form" action="user?method=modify" method="post">
+   <div class="form-group">
+      <label for="firstname" class="col-sm-2 control-label">名字</label>
+      <div class="col-sm-10">
+         <input type="text" class="form-control" name="firstname" value=$!user.firstname
+            placeholder="请输入名字">
+      </div>
+   </div>
+   
+   <div class="form-group">
+      <label for="username" class="col-sm-2 control-label">用户名</label>
+      <div class="col-sm-10">
+         <input type="text" class="form-control" name="username" value=$!user.username
+            placeholder="请输用户名">
+      </div>
+   </div>
+
+   <div class="form-group">
+      <label for="password" class="col-sm-2 control-label">密码</label>
+      <div class="col-sm-10">
+         <input type="text" class="form-control" name="password" value=$!user.password
+            placeholder="请输密码">
+      </div>
+   </div>
+
+   <div class="form-group">
+      <label for="password2" class="col-sm-2 control-label">重复密码</label>
+      <div class="col-sm-10">
+         <input type="text" class="form-control" name="password2" value=$!user.password
+            placeholder="请重复修改后的密码">
+      </div>
+   </div>   
+
+   <div class="form-group">
+      <label for="email" class="col-sm-2 control-label">电子邮箱</label>
+      <div class="col-sm-10">
+         <input type="text" class="form-control" name="email" value=$!user.email
+            placeholder="请输电子邮箱">
+      </div>
+   </div>  
+
+   <div class="form-group">
+      <label for="web" class="col-sm-2 control-label">个人网站</label>
+      <div class="col-sm-10">
+         <input type="text" class="form-control" name="web" placeholder="请输个人网站" value=$!user.web>
+      </div>
+   </div>     
+   
+   
+   
+   
+   <div class="form-group">
+      <div class="col-sm-offset-2 col-sm-10">
+         <button type="submit" class="btn btn-primary">确认修改</button>
+      </div>
+   </div>
+</form>

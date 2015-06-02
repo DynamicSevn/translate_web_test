@@ -1,0 +1,38 @@
+<div class="page-header">
+    <h2>我的求译</h2>
+</div>
+
+#set($documentList = $page.tList)
+#foreach($document in $documentList)
+    <div class="thumbnail">
+        <div class="nodisplay">$!document.docid</div>
+        <div class="caption">
+            
+            <h3>
+                $document.title
+            </h3>
+            
+                #set($str=$document.content)
+                #if($str.length()>250)
+                    #set($str=$str.substring(0,200))
+                    #set($getStr = $str.replaceAll("<[.[^<]]*>",""))
+                    #set($getStr = $getStr.replaceAll("<[.[^<]]*",""))
+                    
+                    <p>$getStr</p>
+                #else
+                    <p>$!document.content</p>
+                #end
+            
+            <p>
+                <a class="btn btn-primary" href="/document?method=show&docid=$document.docid">浏览</a> 
+                
+                <a class="btn btn-primary" onclick="model(this)" data-toggle="modal">删除</a>
+                <a class="btn btn-primary" href="/document?method=modify&docid=$document.docid">修改</a>
+                
+            </p>
+        </div>
+    </div>
+#end
+
+#parse("templet/vo_pager.html")
+#parse("templet/confirm_model.html")   

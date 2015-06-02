@@ -1,0 +1,20 @@
+#set($nextPage=$page.curPage+1)
+#set($prePage=$page.curPage - 1)<!-- 此处不加空格会发生错误？？？-->
+
+               <div class="pager">
+	  <li class="previous"><a href="/document?method=show&curPage=1&docid=$document.docid">&larr; 首页</a></li>
+	  #if($page.curPage==1)
+		<li class="disabled"><a href="#">上一页</a></li>
+		#else
+		<li><a href="/document?method=show&curPage=$prePage&docid=$document.docid">上一页</a></li>
+	  #end
+	  
+	  <li>共$!page.totleCount条记录，当前第 $!page.curPage 页，共$!page.totlePage 页</li>
+	  
+	  #if($page.curPage==$page.totlePage)
+		<li class="disabled"><a href="#">下一页</a></li>
+		#else
+		<li><a href="/document?method=show&curPage=$nextPage&docid=$document.docid">下一页</a></li>
+	  #end
+	  <li class="next"><a href="/document?method=show&curPage=$page.totlePage&docid=$document.docid">尾页 &rarr;</a></li>
+</div>

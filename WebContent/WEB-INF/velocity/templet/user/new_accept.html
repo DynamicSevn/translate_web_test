@@ -1,0 +1,12 @@
+#foreach($accept in $accCommentList)
+    <div class="well">
+        <p><a href="user?method=guest_user_index&userid=$!accept.user.userid">$!accept.user.username</a> 接受了我对<b><a href="document?method=show&docid=$!accept.document.docid">《$!accept.document.title》</a></b>的翻译</p>
+        <blockquote>
+
+            <small>
+                <a href="document?method=show&docid=$!accept.document.docid">$!accept.content</a>
+            </small>
+        </blockquote>
+        <p>我获得了$!accept.document.point积分，当前积分$!sessionUser.point</p>
+    </div>
+#end

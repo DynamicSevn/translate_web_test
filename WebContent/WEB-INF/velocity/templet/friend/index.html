@@ -1,0 +1,27 @@
+    <div class="page-header">
+        <h3>我的朋友</h3>
+    </div>
+    <ul id="myTab" class="nav nav-tabs">
+       <li class="active">
+          <a href="#follow" data-toggle="tab">
+                                    我关注的
+          </a>
+       </li>
+       <li><a href="#followed" data-toggle="tab">关注我的</a></li>
+    </ul>   
+    
+    
+    <div id="myTabContent" class="tab-content">
+        <div class="tab-pane fade in active" id="follow">
+
+        </div>
+        
+        <div class="tab-pane fade" id="followed">
+            
+        </div>
+    </div>
+    <script>
+        $("#follow").load("friend?method=follow_list");
+        $("#followed").load("friend?method=followed_list");
+    </script>
+    </div>
